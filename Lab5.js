@@ -33,9 +33,12 @@ const Lab5 = (app) => {
 			id: new Date().getTime(),
 			title: "New Todo",
 			completed: false,
+			description: "New Todo Description",
 		};
 		todos.push(newTodo);
-		res.json(newTodo);
+		console.log("todos", todos);
+		console.log("todo", newTodo);
+		res.json(todos);
 	});
 
 	app.get("/a5/todos/:id", (req, res) => {
