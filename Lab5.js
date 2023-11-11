@@ -8,13 +8,75 @@ const assignment = {
 };
 
 const todos = [
-	{ id: 1, title: "Task 1", completed: false, description: "Task Description" },
-	{ id: 2, title: "Task 2", completed: true, description: "Task Description" },
-	{ id: 3, title: "Task 3", completed: false, description: "Task Description" },
-	{ id: 4, title: "Task 4", completed: true, description: "Task Description" },
+	{
+		id: 1,
+		title: "Task 1",
+		completed: false,
+		description: "Task Description",
+		due: "2021-09-09",
+	},
+	{
+		id: 2,
+		title: "Task 2",
+		completed: true,
+		description: "Task Description",
+		due: "2021-09-09",
+	},
+	{
+		id: 3,
+		title: "Task 3",
+		completed: false,
+		description: "Task Description",
+		due: "2021-09-09",
+	},
+	{
+		id: 4,
+		title: "Task 4",
+		completed: true,
+		description: "Task Description",
+		due: "2021-09-09",
+	},
 ];
 
 const Lab5 = (app) => {
+	app.post("/a5/todos", (req, res) => {
+		const newTodo = {
+			...req.body,
+			id: new Date().getTime(),
+		};
+		todos.push(newTodo);
+		res.json(newTodo);
+	});
+
+	app.delete("/a5/todos/:id", (req, res) => {
+		const { id } = req.params;
+		const todo = todos.find((t) => t.id === parseInt(id));
+		if (!todo) {
+			res.status(404).json({
+				message: `Unable to delete Todo with ID ${id}`,
+			});
+			return;
+		}
+		todos.splice(todos.indexOf(todo), 1);
+		res.sendStatus(200);
+	});
+
+	app.put("/a5/todos/:id", (req, res) => {
+		const { id } = req.params;
+		const todo = todos.find((t) => t.id === parseInt(id));
+		if (!todo) {
+			res.status(404).json({
+				message: `Unable to update Todo with ID ${id}`,
+			});
+			return;
+		}
+		todo.title = req.body.title;
+		todo.description = req.body.description;
+		todo.due = req.body.due;
+		todo.completed = req.body.completed;
+		res.sendStatus(200);
+	});
+
 	app.get("/a5/todos", (req, res) => {
 		const { completed } = req.query;
 		if (completed !== undefined) {
@@ -36,8 +98,6 @@ const Lab5 = (app) => {
 			description: "New Todo Description",
 		};
 		todos.push(newTodo);
-		console.log("todos", todos);
-		console.log("todo", newTodo);
 		res.json(todos);
 	});
 
