@@ -6,7 +6,7 @@ import ModuleRoutes from "./modules/routes.js";
 import AssignmentRoutes from "./assignments/routes.js";
 import cors from "cors";
 import "dotenv/config";
-// import session from "express-session";
+import session from "express-session";
 import mongoose from "mongoose";
 import UserRoutes from "./users/routes.js";
 mongoose.connect("mongodb://127.0.0.1:27017/kanbas");
@@ -18,6 +18,12 @@ app.use(
 		origin: process.env.FRONTEND_URL,
 	})
 );
+const sessionOptions = {
+	secret: "any string",
+	resave: false,
+	saveUninitialized: false,
+};
+app.use(session(sessionOptions));
 app.use(express.json());
 UserRoutes(app);
 ModuleRoutes(app);
